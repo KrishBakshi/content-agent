@@ -1,0 +1,13 @@
+interface:
+  display_name: "X Research Naviagation"
+  short_description: "Navigate X notifications into the timeline view"
+  default_prompt: "Use $x-research-naviagation to open https://x.com/home, click Notifications, find a blue notification icon, click it, and confirm the final URL is https://x.com/i/timeline. If the caller requested a final artifact, continue after navigation and return only that artifact with no extra summary text."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "comet-mcp"
+      description: "Live browser navigation for X or Twitter flows"
+
+policy:
+  allow_implicit_invocation: true

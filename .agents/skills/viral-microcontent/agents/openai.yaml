@@ -1,0 +1,7 @@
+interface:
+  display_name: "Viral Microcontent"
+  short_description: "Short social posts with strong hooks"
+  default_prompt: "Use $viral-microcontent to turn this topic into three under-200-character social posts with sharper hooks."
+
+policy:
+  allow_implicit_invocation: true

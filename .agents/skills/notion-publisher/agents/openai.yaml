@@ -1,0 +1,13 @@
+interface:
+  display_name: "Notion Publisher"
+  short_description: "Store research and drafts in Notion"
+  default_prompt: "Use $notion-publisher to save this research and the final post drafts into Notion with a clean structure."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "notion"
+      description: "Save structured content into Notion"
+
+policy:
+  allow_implicit_invocation: true

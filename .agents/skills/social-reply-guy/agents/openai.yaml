@@ -1,0 +1,7 @@
+interface:
+  display_name: "Social Reply Guy"
+  short_description: "Pick posts worth engaging and draft replies"
+  default_prompt: "Use $social-reply-guy to choose the 5 best AI posts to engage with and draft replies that attract the right audience."
+
+policy:
+  allow_implicit_invocation: true

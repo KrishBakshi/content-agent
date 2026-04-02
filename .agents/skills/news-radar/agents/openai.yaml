@@ -1,0 +1,13 @@
+interface:
+  display_name: "News Radar"
+  short_description: "Recent AI trend scan with ranked topics"
+  default_prompt: "Use $news-radar to scan the last 6 hours of AI news and social chatter, rank the top 5 topics, and save them to local JSON."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "comet-mcp"
+      description: "Research recent news and social signals"
+
+policy:
+  allow_implicit_invocation: true
