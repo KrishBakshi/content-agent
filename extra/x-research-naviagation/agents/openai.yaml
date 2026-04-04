@@ -6,7 +6,7 @@ interface:
 dependencies:
   tools:
     - type: "mcp"
-      value: "comet-mcp"
+      value: "browser-use"
       description: "Live browser navigation for X or Twitter flows"
 
 policy:

@@ -31,7 +31,7 @@ Guide the browser through this exact sequence:
 4. Inspect the visible notification list
 5. Find a notification item with a blue icon
 6. Click that notification item
-7. Allow the Comet navigation process up to 2 minutes to complete before treating it as stalled
+7. Allow the browser navigation process up to 2 minutes to complete before treating it as stalled
 8. Check the final URL
 9. Only continue if the final URL is `https://x.com/i/timeline`
 10. After timeline confirmation, continue through scraping and ranking if the caller requested research output
@@ -41,7 +41,7 @@ Guide the browser through this exact sequence:
 
 - Follow the navigation path exactly in order
 - Do not skip directly to `https://x.com/i/timeline`
-- Allow up to 2 minutes of patience for the Comet navigation flow before stopping or retrying
+- Allow up to 2 minutes of patience for the browser navigation flow before stopping or retrying
 - If the blue notification icon is not visible, say so clearly
 - If the click leads somewhere else, report the actual URL
 - Treat the timeline confirmation as required before trend scraping starts

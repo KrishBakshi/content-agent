@@ -4,6 +4,8 @@ This repo defines reusable Codex skills and agent prompts for a repeatable AI-co
 
 The main improvement target in this project is consistency: every research, writing, engagement, and publishing step should produce a predictable artifact with enough context for the next step to consume directly.
 
+This repo is `uv`-managed. Prefer `uv run ...` for local commands, including `uv run browser-use ...` when using the Browser Use CLI from the project environment.
+
 ## Workflow
 
 1. Research the last `X` hours of AI and tech activity.
@@ -11,6 +13,12 @@ The main improvement target in this project is consistency: every research, writ
 3. Turn one topic into short-form content.
 4. Pick posts worth replying to.
 5. Save outputs into Notion.
+
+The workflow is intentionally chained:
+
+- `x-trend-research` collects visible X posts as the X-source artifact
+- `news-radar` ranks topics across the collected X signals plus the other default sources
+- downstream writing, engagement, and publishing steps should consume the structured research artifact instead of redoing discovery
 
 ## Canonical Artifact Contract
 
@@ -32,16 +40,16 @@ Every prompt and skill should preserve:
 
 This repo includes the following reusable skills:
 
-1. `news-radar`
-2. `viral-microcontent`
-3. `social-reply-guy`
-4. `notion-publisher`
-5. `comet-browser`
-6. `x-research-naviagation`
+1. `x-trend-research`
+2. `news-radar`
+3. `viral-microcontent`
+4. `social-reply-guy`
+5. `notion-publisher`
+6. `browser-use`
 
-The MCP servers already configured in [.codex/config.toml](/Users/nasiwakmac/wrk/content-agent/.codex/config.toml) are:
+The MCP servers referenced in [.codex/config.toml](/Users/nasiwakmac/wrk/content-agent/.codex/config.toml) are:
 
-- `comet-mcp` for research
+- `browser-use` for browser-driven research and live page inspection
 - `notion` for publishing and storage
 
 ## Layout
@@ -52,9 +60,13 @@ The MCP servers already configured in [.codex/config.toml](/Users/nasiwakmac/wrk
 
 ## Skill Summary
 
+### `x-trend-research`
+
+Collect visible X timeline posts within the requested window, verify timeline navigation, and save a reusable source artifact that downstream ranking can consume.
+
 ### `news-radar`
 
-Research the last `X` hours of AI and tech activity, deduplicate overlapping items, rank exactly 5 topics, and save valid JSON that matches the shared artifact spec.
+Research the last `X` hours of AI and tech activity, combine the X-source artifact with the other default sources, deduplicate overlapping items, rank exactly 5 topics, and save valid JSON that matches the shared artifact spec.
 
 ### `viral-microcontent`
 
@@ -68,13 +80,9 @@ Select the 5 best posts to engage with and return replies in a stable, reusable 
 
 Convert a final artifact into a clean Notion page or database entry while preserving links, timestamps, topic IDs, and section order.
 
-### `comet-browser`
+### `browser-use`
 
-Use `comet-mcp` for current, source-backed research when the task depends on live web information.
-
-### `x-research-naviagation`
-
-Use this whenever X or Twitter research is part of the workflow. It is the canonical navigation reference for reaching the X timeline before continuing trend research.
+Use `browser-use` for current, source-backed research when the task depends on live web information.
 
 ## Agents
 
@@ -107,7 +115,8 @@ Each skill or agent prompt should ideally answer:
 To use these in Codex, invoke the skills by name, for example:
 
 - `Use $news-radar to gather the top AI topics from the last 6 hours.`
+- `Use $x-trend-research to collect X posts from the last 6 hours before ranking.`
 - `Use $viral-microcontent to draft three hooks for topic 2.`
 - `Use $social-reply-guy to find five posts worth engaging with today.`
 - `Use $notion-publisher to save these final drafts to Notion.`
-- `Use $comet-browser to search the web for the latest information on this topic and cite the sources.`
+- `Use $browser-use to inspect the source pages for the latest information on this topic and cite the sources.`

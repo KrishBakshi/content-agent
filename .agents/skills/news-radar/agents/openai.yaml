@@ -6,8 +6,8 @@ interface:
 dependencies:
   tools:
     - type: "mcp"
-      value: "comet-mcp"
-      description: "Research recent news and social signals"
+      value: "browser-use"
+      description: "Research recent news and social signals through live page navigation and inspection"
 
 policy:
   allow_implicit_invocation: true

@@ -19,6 +19,14 @@ The project is intended to support this workflow:
 - `.codex/config.toml` defines MCP servers used by the workflow
 - `README.md` gives the high-level overview
 
+## Runtime
+
+This project is `uv`-managed.
+
+- Prefer `uv run` for local commands in this repo
+- If `browser-use` is invoked locally, run it as `uv run browser-use ...`
+- Do not document or suggest bare `python`, `pip`, or `browser-use` commands when the `uv run` form is available
+
 ## Available Skills
 
 ### `$news-radar`
@@ -27,20 +35,20 @@ Use for recent trend discovery. This skill should:
 
 - gather recent AI news and social signals
 - check the default source set:
-  - X timeline via `$x-research-naviagation`
+  - X timeline via `$x-trend-research`
   - Hacker News: `https://news.ycombinator.com/`
   - Reddit Tech News hot: `https://www.reddit.com/r/technews/hot/`
 - cluster duplicate stories
 - rank the top 5 topics
 - save output to a local JSON file
 
-### `$x-research-naviagation`
+### `$x-trend-research`
 
-Use for X or Twitter research navigation. This skill should:
+Use for X or Twitter source collection. This skill should:
 
-- handle the required X timeline navigation flow
-- be the default reference whenever X or Twitter research is needed
-- land on `https://x.com/i/timeline` before trend research continues
+- collect visible X timeline posts inside the requested time window
+- serve as the X source collector before downstream ranking
+- land on `https://x.com/i/timeline`, extract visible posts, and save a reusable JSON artifact
 
 ### `$viral-microcontent`
 
@@ -100,9 +108,9 @@ File: [.codex/agents/content-orchestrator.md](/Users/nasiwakmac/wrk/content-agen
 
 ## MCP Dependencies
 
-Configured in [.codex/config.toml](/Users/nasiwakmac/wrk/content-agent/.codex/config.toml):
+Referenced in [.codex/config.toml](/Users/nasiwakmac/wrk/content-agent/.codex/config.toml):
 
-- `comet-mcp` for research
+- `browser-use` for browser-driven research and live page inspection
 - `notion` for publishing
 
 ## Working Rules
@@ -113,26 +121,31 @@ Configured in [.codex/config.toml](/Users/nasiwakmac/wrk/content-agent/.codex/co
 - Default research output path is `./output/news-radar.json`
 - Treat rumor and confirmed updates differently
 - When a skill or agent has a JSON artifact contract, include the exact JSON schema in the live tool prompt
-- For Comet-based research calls, explicitly say `Return valid JSON only. No prose.`
+- For browser-driven research calls, explicitly say `Return valid JSON only. No prose.`
+- Keep the workflow integral: `x-trend-research` collects X posts first, `news-radar` ranks the combined source set, downstream steps consume the structured artifact rather than re-inventing it
+- When documenting repo commands, prefer `uv run ...` examples
 - Do not rely on post-processing to recover structure that should have been enforced in the prompt
 
 ## Recommended Flow
 
-1. Use `$news-radar` to produce the topic shortlist
-2. Use `$viral-microcontent` on the selected topic
-3. Use `$social-reply-guy` for outbound engagement opportunities
-4. Use `$notion-publisher` to store the result
+1. Use `$x-trend-research` to collect X posts and produce the X source artifact
+2. Use `$news-radar` to combine sources and rank the topic shortlist
+3. Use `$viral-microcontent` on the selected topic
+4. Use `$social-reply-guy` for outbound engagement opportunities
+5. Use `$notion-publisher` to store the result
 
 ## Example Invocations
 
+- `Use $x-trend-research to collect visible X posts from the last 6 hours and save them locally.`
 - `Use $news-radar to scan the last 6 hours of AI news and save the result locally.`
 - `Use $viral-microcontent to turn topic 3 into five sharper post variants.`
 - `Use $social-reply-guy to pick the best 5 posts to reply to today.`
 - `Use $notion-publisher to save this research and final draft into Notion.`
+- `Use $browser-use for live source inspection, or run local browser automation with uv run browser-use ...`
 
 ## Prompting Guardrail
 
-Before sending any live research prompt to Comet or another browsing tool:
+Before sending any live research prompt to `browser-use` or another browsing tool:
 
 1. Identify the artifact contract for that step.
 2. Paste the exact expected JSON shape into the prompt.

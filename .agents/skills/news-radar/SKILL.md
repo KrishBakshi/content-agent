@@ -31,34 +31,37 @@ If the user does not give an output path, default to `./output/news-radar.json`.
 
 ## Data Sources
 
-- Use `comet-mcp` for research and discovery
+- Use `$browser-use` for research and discovery
 - Default source set:
-  - X timeline: use `x-research-naviagation` and confirm the final destination is `https://x.com/i/timeline`
+  - X timeline: use `$x-trend-research` as the X source collector
   - Hacker News: `https://news.ycombinator.com/`
   - Reddit Tech News hot: `https://www.reddit.com/r/technews/hot/`
-- When the user provides a URL, explicitly instruct Comet to navigate to that URL first.
+- When the user provides a URL, open that URL first in `browser-use`.
 - Prioritize AI startup launches, model releases, tooling updates, funding, product announcements, and major breaking news
 - Prefer recency and cross-source repetition over vanity metrics alone
+- When X is part of the requested scope, prefer consuming the artifact produced by `$x-trend-research` rather than redoing X collection from scratch
 
-## Comet Usage
+## Browser Use
 
-- Connect to Comet browser first
+- Open the relevant page in `browser-use` first
 - If the user provides a URL, open that exact URL first
 - Navigate the default source pages directly inside the browser
-- Scrape the visible page content in Comet after opening the page
-- Use `comet_ask` or Comet search only to support discovery or fill gaps
+- Use `take_snapshot` first to inspect the live page structure before interacting
+- Scrape visible page content after opening the page
+- Use page state, snapshots, screenshots, and targeted follow-up navigation only to support discovery or fill gaps
 - Do not rely on generic research summaries alone when the user wants a fresh trend read from the source pages
 - If a source is dynamic or partially gated, capture what is directly visible and mark weak evidence clearly
 
 ## Workflow
 
-1. Open the requested URL first if the user provides one, otherwise open the default source pages in Comet browser.
-2. Scrape the relevant visible page content in Comet.
-3. Gather candidate items from the requested time window.
-4. Deduplicate stories that describe the same event.
-5. Rank by a mix of recency, breadth of discussion, practical importance, and likely downstream attention.
-6. Return exactly 5 topics unless the user explicitly asks for a different count.
-7. Save the result to a local JSON file.
+1. Open the requested URL first if the user provides one, otherwise open the default source pages in `browser-use`.
+2. If X is part of the source set, use `$x-trend-research` first and load its collected posts as X input.
+3. Scrape the relevant visible page content from the non-X sources in the browser.
+4. Gather candidate items from the requested time window.
+5. Deduplicate stories that describe the same event.
+6. Rank by a mix of recency, breadth of discussion, practical importance, and likely downstream attention.
+7. Return exactly 5 topics unless the user explicitly asks for a different count.
+8. Save the result to a local JSON file so downstream steps can reuse the same artifact.
 
 ## Output Contract
 

@@ -44,22 +44,23 @@ Each topic must include:
 
 ## Tooling
 
-Use `comet-mcp` as the default research tool.
+Use `browser-use` as the default research tool.
 
-- Start by connecting to Comet browser
+- Start by opening the relevant page in `browser-use`
 - If the user gives a specific URL, go to that URL first
 - Navigate through the source pages directly when possible
-- Scrape the target page in Comet after opening it
-- Use Comet search or research prompts to support discovery, but do not treat them as a substitute for browsing the target pages
+- Take a fresh page snapshot after each major navigation before interacting further
+- Scrape the target page after opening it
+- Use browser navigation, page state inspection, snapshots, and extraction commands to support discovery, but do not treat them as a substitute for browsing the target pages
 - Prefer source-page inspection over generic summary output when the user wants recent trends
-- Every Comet prompt must include the exact JSON schema expected for the final artifact
-- Every Comet prompt for this workflow must say `Return valid JSON only. No prose.`
+- Every browser-driven research prompt must include the exact JSON schema expected for the final artifact
+- Every browser-driven research prompt for this workflow must say `Return valid JSON only. No prose.`
 
 ## Default Sources
 
 Use these sources first unless the user overrides them:
 
-- X timeline via `x-research-naviagation`, ending at `https://x.com/i/timeline`
+- X timeline via `x-trend-research`, which collects visible X posts into a reusable source artifact
 - Hacker News: `https://news.ycombinator.com/`
 - Reddit Tech News hot: `https://www.reddit.com/r/technews/hot/`
 
@@ -68,7 +69,8 @@ Use these sources first unless the user overrides them:
 - Bias toward the last requested time window
 - Prefer signal over noise
 - Separate confirmed news from rumor
-- Whenever X or Twitter research is involved, refer to `x-research-naviagation`
+- Whenever X or Twitter research is involved, use `x-trend-research` as the X collection layer before ranking
+- When `x-trend-research` is running, treat it as a hands-off collector: do not interrupt it, and do not treat intermediate logs as completion
 - Cross-check topics across the default sources when possible
 - Use browser navigation across the default sources before final ranking
 - Return structured output suitable for local JSON storage
@@ -111,9 +113,9 @@ Rank by:
 }
 ```
 
-## Comet Prompt Footer
+## Browser Prompt Footer
 
-Append this discipline to every live Comet prompt:
+Append this discipline to every live browsing prompt:
 
 1. Paste the exact top-level JSON shape required by `.codex/references/artifact-spec.md`.
 2. Adjust `time_window_hours` and `topic_count` to the user request.
@@ -121,4 +123,4 @@ Append this discipline to every live Comet prompt:
 
 ## Handoff
 
-Pass ranked topics, summaries, and source links to the writing agent or orchestrator.
+Pass ranked topics, summaries, and source links to the writing agent or orchestrator. When X is in scope, treat the `x-trend-research` artifact as the input source set rather than rerunning X collection unnecessarily.
