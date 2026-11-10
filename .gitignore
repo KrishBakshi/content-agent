@@ -13,3 +13,4 @@ wheels/
 main.py
 browser_data/
 output/*
+tmp/
